@@ -6,7 +6,8 @@ public class OutOfBounds : MonoBehaviour
 {
     public Transform t;
    
-    // Update is called once per frame
+    // This script deleteds objects that are below a certain height. 
+    // to not not over populate the scene creating to optimise performance. 
     void FixedUpdate()
     {
         t = gameObject.GetComponent<Transform>();

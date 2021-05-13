@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -45,61 +46,38 @@ public class CarMovement : MonoBehaviour
         ac.pitch = 0.5f;
         steerable = true;
     }
-    /*public void Update()
-    {
-        dx = Input.acceleration.x * handling;
-        transform.position = new Vector2(transform.position.x, transform.position.y);
-    }*/
+   
     public void FixedUpdate()
     {
-        GetInput();
-        //Steer();
+        //GetInput();
         Accelerate();
         if(steerable == true){
-            MoveTilt();
-            //Movebuttons();
+            //MoveTilt();
+            Movebuttons(); //this is for testing in the unity editor (no tilt controls)
         }        
     }
 
     void MoveTilt() {
         float temp = Input.acceleration.x;
-        if (0.001 < temp || temp < -0.001) {
+        if (0.001 < temp || temp < -0.001) { //tilting phone right
             rb.velocity = new Vector3(temp * handling, rb.velocity.y, rb.velocity.z);
             rb.constraints = RigidbodyConstraints.None;
             rb.constraints = RigidbodyConstraints.FreezeRotationY;
             rb.constraints = RigidbodyConstraints.FreezeRotationZ;
             rb.constraints = RigidbodyConstraints.FreezePositionY;
         }
-        else if (0.001 > temp || temp > -0.001)
+        else if (0.001 > temp || temp > -0.001) //tilting phone left
         {
+            rb.velocity = new Vector3(temp * -handling, rb.velocity.y, rb.velocity.z);
             rb.constraints = RigidbodyConstraints.None;
             rb.constraints = RigidbodyConstraints.FreezeRotationY;
             rb.constraints = RigidbodyConstraints.FreezePositionX;
             rb.constraints = RigidbodyConstraints.FreezePositionY;
         }
-        /*else
-        {
-            rb.velocity = new Vector3(temp * handling, rb.velocity.y, rb.velocity.z);
-            rb.constraints = RigidbodyConstraints.None;
-            rb.constraints = RigidbodyConstraints.FreezeRotationY;
-        }
-        /*else if (temp > 1)
-        {
-            rb.velocity = new Vector3(-handling, rb.velocity.y, rb.velocity.z);
-            rb.constraints = RigidbodyConstraints.None;
-            //rb.constraints = RigidbodyConstraints.FreezeRotationZ;
-            rb.constraints = RigidbodyConstraints.FreezeRotationY;
-        }
-        else if (temp < -1){
-            rb.velocity = new Vector3(handling, rb.velocity.y, rb.velocity.z);
-            rb.constraints = RigidbodyConstraints.None;
-            //rb.constraints = RigidbodyConstraints.FreezeRotationZ;
-            rb.constraints = RigidbodyConstraints.FreezeRotationY;
-        }*/
     }
     void Movebuttons()
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow)) //press left arrow
         {
             rb.velocity = new Vector3(-handling, rb.velocity.y, rb.velocity.z);
             rb.constraints = RigidbodyConstraints.None;
@@ -108,7 +86,7 @@ public class CarMovement : MonoBehaviour
             LerpLeft();
 
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.RightArrow)) //press right arrow
         {
             rb.velocity = new Vector3(handling, rb.velocity.y, rb.velocity.z);
             rb.constraints = RigidbodyConstraints.None;
@@ -124,6 +102,8 @@ public class CarMovement : MonoBehaviour
             LerpNeutral();
         }
     }
+    
+    //procedural aniation using c#
     public void LerpNeutral(){
         carbody.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(rNeutral), t);
     }
@@ -134,6 +114,7 @@ public class CarMovement : MonoBehaviour
         carbody.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(rRight), t);
     }
 
+    //feature pending: fixing issues where player hits into side walls
     public void FixBounce(string hitside){
         coroutine = wallhitfix(0.3f);
         if(hitside == "left"){
@@ -165,12 +146,15 @@ public class CarMovement : MonoBehaviour
         fixwallhit = false;
     }
 
+    /* old code for moving left and right
     public void GetInput()
     {
         m_horizontalInput = Input.GetAxis("Horizontal");
         //m_verticalInput = Input.GetAxis("Vertical");
     }
+    */
 
+    /* old code for steering vehicle using the wheel rotations
     private void Steer()
     {
         m_steeringAngle = maxSteerAngle * m_horizontalInput;
@@ -178,30 +162,32 @@ public class CarMovement : MonoBehaviour
         frontRightW.steerAngle = m_steeringAngle;
         //backLeftW.steerAngle = -m_steeringAngle/4;
         //backRightW.steerAngle = -m_steeringAngle/4;
-    }
+    }*/
 
     private void Accelerate()
     {
-
+        //calculate current speed
         currentspeed = 2 * 22 / 7 * backLeftW.radius * backLeftW.rpm * 60 / 1000;
+        // accelerates when current speed is under max speed
         if (currentspeed <= maxspeed)
         {
             backLeftW.motorTorque = 1 * motorForce;
             backRightW.motorTorque = 1 * motorForce;
         }
+        //stops accelerating when reached max speed
         else if (currentspeed >= maxspeed)
         {
             backLeftW.motorTorque = 0 * motorForce;
             backRightW.motorTorque = 0 * motorForce;
         }
-        //frontLeftW.motorTorque = m_verticalInput * motorForce;
-        //frontRightW.motorTorque = m_verticalInput * motorForce;
 
+        //apply wheel rotations to models
         ApplyLocalPositionToVisuals(backLeftW);
         ApplyLocalPositionToVisuals(backRightW);
         ApplyLocalPositionToVisuals(frontLeftW);
         ApplyLocalPositionToVisuals(frontRightW);
 
+        //change pitch of audio source for engine
         if (currentspeed <= 100)
         {
             ac.pitch = 0.5f;
@@ -214,10 +200,10 @@ public class CarMovement : MonoBehaviour
         {
             ac.pitch = .72f;
         }
-        /*else if (currentspeed <= 250)&& currentspeed >= 200)
+        /*else if (currentspeed <= 250 && currentspeed >= 200) //I personnally didnt like the sound of these pitches
         {
             ac.pitch = .85f;
-        }
+        }/*
         else if (currentspeed >= 250)
         {
             ac.pitch = .9f;
@@ -225,20 +211,16 @@ public class CarMovement : MonoBehaviour
             
     }
 
+    //Applying turning to wheel models 
     public void ApplyLocalPositionToVisuals(WheelCollider collider)
     {
-        if (collider.transform.childCount == 0)
-        {
-            return;
-        }
-
         Transform visualWheel = collider.transform.GetChild(0);
 
         Vector3 position;
         Quaternion rotation;
         collider.GetWorldPose(out position, out rotation);
 
-        //rotation =rotation * Quaternion.Euler(0f, -90f, 3f);
+        //rotation =rotation * Quaternion.Euler(0f, -90f, 3f); // old code for rotating wheel for rotation steering
 
         visualWheel.transform.position = position;
         visualWheel.transform.rotation = rotation;

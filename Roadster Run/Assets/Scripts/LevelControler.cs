@@ -28,7 +28,6 @@ public class LevelControler : MonoBehaviour
     }
     private void Update()
     {
-        //_camera.transform.position = Vector3.MoveTowards(_camera.transform.position, _camera.transform.position + Vector3.forward, Time.deltaTime * speed);
         currentCamPos = (int)(_camera.transform.position.z / pieceLength);
         if (currentCamPos != lastCamPos) {
             lastCamPos = currentCamPos;
@@ -36,47 +35,16 @@ public class LevelControler : MonoBehaviour
             SpawnNewLevelPiece();
         }
     }
-    void SpawnNewLevelPiece()
+    public void SpawnNewLevelPiece()
     {
+        int pieceIndex = probabilityList[Random.Range(0, probabilityList.Count)];
 
-        //float chance = Random.Range(1f,14f);
-        //if (chance <= 10)
-        //{
-            int pieceIndex = probabilityList[Random.Range(0, probabilityList.Count)];
-
-            GameObject newLevelPiece = Instantiate
-                    (levelPieces[pieceIndex].prefab, new Vector3(0f, 0f, (currentCamPos + activePieces.Count) * pieceLength),
-                    transform.rotation * Quaternion.identity);
-            activePieces.Enqueue(newLevelPiece);
-        /*}
-        
-        else if( chance <=11) {
-            GameObject newLevelPiece = Instantiate
-                    (levelPieces[1].prefab, new Vector3(0f, 0f, (currentCamPos + activePieces.Count) * pieceLength),
-                    transform.rotation * Quaternion.Euler(0f, 0f, 0f));
-            activePieces.Enqueue(newLevelPiece);
-        }
-        else if (chance <= 12)
-        {
-            GameObject newLevelPiece = Instantiate
-                    (levelPieces[2].prefab, new Vector3(0f, 0f, (currentCamPos + activePieces.Count) * pieceLength),
-                    transform.rotation * Quaternion.Euler(0f, 0f, 0f));
-            activePieces.Enqueue(newLevelPiece);
-        }
-        else if (chance <= 13)
-        {
-            GameObject newLevelPiece = Instantiate
-                    (levelPieces[3].prefab, new Vector3(0f, 0f, (currentCamPos + activePieces.Count) * pieceLength),
-                    transform.rotation * Quaternion.Euler(0f, 0f, 0f));
-            activePieces.Enqueue(newLevelPiece);
-        }
-        else if (chance >= 14)
-        {
-            GameObject newLevelPiece = Instantiate
-                    (levelPieces[4].prefab, new Vector3(0f, 0f, (currentCamPos + activePieces.Count) * pieceLength),
-                    transform.rotation * Quaternion.Euler(0f, 0f, 0f));
-            activePieces.Enqueue(newLevelPiece);
-        }*/
+        GameObject newLevelPiece = Instantiate
+                (levelPieces[pieceIndex].prefab, new Vector3(0f, 0f, (currentCamPos + activePieces.Count) 
+                    * pieceLength),
+                transform.rotation * Quaternion.identity);
+        activePieces.Enqueue(newLevelPiece);
+       
     }
     void DestroyLevelPiece() {
         GameObject oldLevelPiece = activePieces.Dequeue();

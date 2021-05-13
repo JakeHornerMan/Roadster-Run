@@ -6,8 +6,10 @@ public class CosmeticColors : MonoBehaviour
 {
     [SerializeField] public Material playerColor;
     private IEnumerator coroutine;
+    public static Cosmeticdata data;
 
     public string carcolor;
+    public string carbody;
 
     public static List<ColorType> colortypes;
 
@@ -20,6 +22,12 @@ public class CosmeticColors : MonoBehaviour
     public void Start(){
         colortypes = new List<ColorType>();
         settingColorsInList(colortypes);
+        data = SaveSystem.LoadData();
+        carcolor = data.CarColor.ToString();
+        //carbody = data.CarBody.ToString(); 
+        Debug.Log("car color loads :" + data.CarColor);
+
+        setColor(carcolor);
     }
 
     public void changeColor(string c){
@@ -38,6 +46,18 @@ public class CosmeticColors : MonoBehaviour
         }
     }
 
+    public void setColor(string c){
+         if(colortypes.Count == 0){
+            Debug.LogError("Elements wount add");
+        }
+        else{
+            for(int i =0; i < colortypes.Count; i++){
+                if(colortypes[i].name == c){
+                    playerColor.color = colortypes[i].color;
+                }
+            }
+        }
+    }
     public void playsound(){
         if(soundAvaliable == true){
             soundAvaliable = false;

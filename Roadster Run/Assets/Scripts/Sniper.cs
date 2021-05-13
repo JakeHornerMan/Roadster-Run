@@ -20,6 +20,8 @@ public class Sniper : MonoBehaviour
         shootingpoint = GameObject.Find("testgun");
 
     }
+
+    //Debugging rays to view them in the editor
     private void FixedUpdate()
     {
         //setting ray position as it changes
@@ -42,39 +44,41 @@ public class Sniper : MonoBehaviour
     {
         shootable = false;
         WeaponSounds.PlaySound("snipershot");
-        RaycastHit hitInfo;
+        RaycastHit hitInfo; //info of raycast
         if (Physics.Raycast(ray, out hitInfo, range))
         {
             Debug.DrawLine(ray.origin, hitInfo.point, Color.red);
-            Debug.Log(hitInfo.collider.name);
-            Health target = hitInfo.transform.GetComponent<Health>();
-            if (target != null)
+            Debug.Log(hitInfo.collider.name); // console log infor for development
+            Health target = hitInfo.transform.GetComponent<Health>(); // finding health script on the hit target
+            if (target != null) //if there was a health script attached to the object
             {
-                target.takeDamage(damage);
+                target.takeDamage(damage); //run take damage on ray cast hit object
             }
         }
         else
         {
-            //missed shot
+            //couldnt find objects with weaponry
             Debug.DrawLine(ray.origin, ray.direction * range, Color.green);
             Debug.Log("false");
         }
-        coroutine = waitandReload(0.3f);
+        coroutine = waitandReload(0.5f);
         StartCoroutine(coroutine);
-        
     }
     IEnumerator waitandReload(float _waitTime) {
+        //timer before reload noise
         yield return new WaitForSeconds(_waitTime);
         reload();
     }
 
-
     public void reload() {
+        //reload noise
         WeaponSounds.PlaySound("reload");
         coroutine = waittoShoot(0.5f);
         StartCoroutine(coroutine);
     }
+
     IEnumerator waittoShoot(float _waitTime) {
+        //wait befor allowing player to shoot again, when shootable = true
         yield return new WaitForSeconds(_waitTime);
         shootable = true;
     }
