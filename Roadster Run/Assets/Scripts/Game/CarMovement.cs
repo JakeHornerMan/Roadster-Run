@@ -52,8 +52,8 @@ public class CarMovement : MonoBehaviour
         //GetInput();
         Accelerate();
         if(steerable == true){
-            //MoveTilt();
-            Movebuttons(); //this is for testing in the unity editor (no tilt controls)
+            MoveTilt();
+            //Movebuttons(); //this is for testing in the unity editor (no tilt controls)
         }        
     }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StoreLogic : MonoBehaviour
+public class StoreManager : MonoBehaviour
 {
     [SerializeField] private List<GameObject> cosmetictabs;
     [SerializeField] private List<GameObject> colorbuttons;
@@ -10,6 +10,8 @@ public class StoreLogic : MonoBehaviour
     [SerializeField] private List<GameObject> wheelbuttons;
     
     private void Start(){
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+
         SetButtonSetInvisible(cosmetictabs);
         SetButtonSetInvisible(colorbuttons);
         SetButtonSetInvisible(bodybuttons);

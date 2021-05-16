@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+
         pausebtn.SetActive(true);
         playbtn.SetActive(false);
         mainMenu.SetActive(false);

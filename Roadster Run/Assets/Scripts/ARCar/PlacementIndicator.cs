@@ -8,6 +8,9 @@ public class PlacementIndicator : MonoBehaviour
 {
     private ARRaycastManager rayManager;
     private GameObject visual;
+    public GameObject objspwn;
+
+    public bool cansee;
 
     public void Start()
     {
@@ -23,6 +26,7 @@ public class PlacementIndicator : MonoBehaviour
         //raycast from center of screen
         List<ARRaycastHit> hits = new List<ARRaycastHit>();
         rayManager.Raycast(new Vector2(Screen.width / 2, Screen.height / 2), hits, TrackableType.Planes);
+
 
         // if we hit AR PLANE, update the position and rotation
         if (hits.Count > 0) {

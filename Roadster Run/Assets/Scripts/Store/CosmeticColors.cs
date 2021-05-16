@@ -20,64 +20,66 @@ public class CosmeticColors : MonoBehaviour
     //public List<ColorType> colortypes = new List<ColorType>();
 
     public void Start(){
-        colortypes = new List<ColorType>();
-        settingColorsInList(colortypes);
-        data = SaveSystem.LoadData();
-        carcolor = data.CarColor.ToString();
+        colortypes = new List<ColorType>(); //set up arraylist 
+        settingColorsInList(colortypes); //populating arraylist
+        data = SaveSystem.LoadData(); //load data to set 
+        carcolor = data.CarColor.ToString(); 
         //carbody = data.CarBody.ToString(); 
-        Debug.Log("car color loads :" + data.CarColor);
+        Debug.Log("car color loads :" + data.CarColor); 
 
-        setColor(carcolor);
+        setColor(carcolor); //setting car color nfor each scene
     }
 
-    public void changeColor(string c){
+    //Color Button pass in the correct body name
+    public void changeColor(string c){ 
         if(colortypes.Count == 0){
-            Debug.LogError("Elements wount add");
+            Debug.LogError("Elements wount add");// if settingColorsInList() didnt populate arraylist
         }
         else{
-            for(int i =0; i < colortypes.Count; i++){
-                if(colortypes[i].name == c){
-                    playerColor.color = colortypes[i].color;
-                    carcolor = c;
-                    playsound();
-                    SaveSystem.dataBuilder();
+            for(int i =0; i < colortypes.Count; i++){ //loop through each object in colortypes
+                if(colortypes[i].name == c){ // if button input matches object name
+                    playerColor.color = colortypes[i].color; //set material as this rgb color value
+                    carcolor = c; // set up for save system
+                    playsound(); 
+                    SaveSystem.dataBuilder(); //save changed data
                 }
             }
         }
     }
 
-    public void setColor(string c){
+    //set color in ever scene loaded
+    public void setColor(string c){ 
          if(colortypes.Count == 0){
-            Debug.LogError("Elements wount add");
+            Debug.LogError("Elements wount add"); // if settingColorsInList() didnt populate arraylist
         }
         else{
-            for(int i =0; i < colortypes.Count; i++){
-                if(colortypes[i].name == c){
-                    playerColor.color = colortypes[i].color;
+            for(int i =0; i < colortypes.Count; i++){ //loop through each object in colortypes
+                if(colortypes[i].name == c){ // if button input matches object name
+                    playerColor.color = colortypes[i].color; //set material as this rgb color value
                 }
             }
         }
     }
     public void playsound(){
-        if(soundAvaliable == true){
-            soundAvaliable = false;
-            ShopSounds.PlaySound("paintspray");
-            coroutine = waittoplay(1f);
+        if(soundAvaliable == true){ //if sound isnt already playing
+            soundAvaliable = false; //stop more soounds
+            ShopSounds.PlaySound("paintspray"); // play the sound
+            coroutine = waittoplay(1f); // wait one second
             StartCoroutine(coroutine);
         }
     }
     
     IEnumerator waittoplay(float _waitTime){
         yield return new WaitForSeconds(_waitTime);
-        soundAvaliable = true;
+        soundAvaliable = true; // allow sound to play again
     }
 
     public void settingColorsInList(List<ColorType> colortypes){
         
-        ColorType blue = new ColorType();
+        ColorType blue = new ColorType(); //new ColorType
         blue.name ="blue";
-        blue.color =new Color(0/255f,35/255f,142/255f);
-        colortypes.Add(blue);
+        blue.color =new Color(0/255f,35/255f,142/255f); //RGB Color value
+        colortypes.Add(blue); // add to arraylist colortypes 
 
         ColorType darkblue = new ColorType();
         darkblue.name ="darkblue";

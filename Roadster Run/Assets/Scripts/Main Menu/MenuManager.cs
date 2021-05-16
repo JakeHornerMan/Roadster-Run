@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
+    public void Start(){
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+    }
     // Start is called before the first frame update
     public void StartGame() {
         SceneManager.LoadScene("Game");

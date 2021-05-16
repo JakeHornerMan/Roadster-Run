@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ObjectSpawner : MonoBehaviour
+public class ARManager : MonoBehaviour
 {
-    public GameObject objectToSpawn;
-    private PlacementIndicator placementIndicator;
-    public GameObject obj;
-    public bool allowSpawn = true;
-
     public GameObject reset;
     public GameObject small;
     public GameObject medium;
@@ -18,11 +13,12 @@ public class ObjectSpawner : MonoBehaviour
     public GameObject scenesOff;
     public GameObject menu;
     public GameObject store;
-
+    public GameObject capture;
+    public GameObject logo;
 
     public void Start()
     {
-        placementIndicator = FindObjectOfType<PlacementIndicator>();
+        Screen.orientation = ScreenOrientation.Portrait;
 
         reset.SetActive(false);
         small.SetActive(false);
@@ -31,48 +27,28 @@ public class ObjectSpawner : MonoBehaviour
         menu.SetActive(false);
         store.SetActive(false);
         scenesOff.SetActive(false);
+        capture.SetActive(false);
+        logo.SetActive(false);
 
         scenesOn.SetActive(true);
     }
-    public void Update()
-    {
-        PlaceCar(); 
+
+    public void placedCar(){
+        reset.SetActive(true);
+        small.SetActive(true);
+        medium.SetActive(true);
+        large.SetActive(true);
+        reset.SetActive(true);
+        capture.SetActive(true);
     }
 
-    public void PlaceCar(){
-        if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began && allowSpawn == true) {
-            obj = Instantiate(objectToSpawn, placementIndicator.transform.position, 
-                placementIndicator.transform.rotation);
-            allowSpawn = false;
-            
-            reset.SetActive(true);
-            small.SetActive(true);
-            medium.SetActive(true);
-            large.SetActive(true);
-            reset.SetActive(true);
-        }
-    }
-
-    public void RemoveCar(){
-        Destroy(obj);
-        allowSpawn = true;
-
+    public void deletedCar(){
         reset.SetActive(false);
         small.SetActive(false);
         medium.SetActive(false);
         large.SetActive(false);
         reset.SetActive(false);
-    }
-
-    public void changeSize(string size){
-        if(size == "small"){
-            obj.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
-        }else if(size == "medium"){
-            obj.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-        }
-        else if(size == "large"){
-            obj.transform.localScale = new Vector3(1f, 0.2f, 1f);
-        }
+        capture.SetActive(false);
     }
 
     public void sceneOptionsOn(){
@@ -91,6 +67,27 @@ public class ObjectSpawner : MonoBehaviour
         scenesOff.SetActive(false);
     }
 
+    public void imageSetup(){
+        reset.SetActive(false);
+        small.SetActive(false);
+        medium.SetActive(false);
+        large.SetActive(false);
+        menu.SetActive(false);
+        store.SetActive(false);
+        scenesOff.SetActive(false);
+        scenesOn.SetActive(false);
+        capture.SetActive(false);
+        
+        logo.SetActive(true);
+    }
+
+    public void imagedone(){
+        logo.SetActive(false);
+
+        placedCar();
+        scenesOn.SetActive(true);
+    }
+
     public void GoMenu()
     {
         SceneManager.LoadScene("MainMenu");
@@ -100,5 +97,4 @@ public class ObjectSpawner : MonoBehaviour
     {
         SceneManager.LoadScene("Store");
     }
-
 }
